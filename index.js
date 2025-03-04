@@ -17,9 +17,8 @@ const todos = []
 function findTodosInFile(file) {
     const lines = file.split('\n');
     const todos = [];
-
     lines.forEach((line, index) => {
-        if (line.includes('// TODO')) {
+        if (line.slice(0, 7) === '// TODO') {
             todos.push(line.trim());
         }
     });
@@ -54,13 +53,13 @@ function processCommand(command) {
             case 'sort importance':
                 break;
             case 'sort user':
-                
-                break
+                sortTodosByUser(todos).forEach((command) => console.log(command));
+                break;
             case 'sort date':
                 const sortedByDate = [...todos].sort((a, b) => {
                     const dateA = a.match(/\/\/ TODO .*?; (\d{4}-\d{2}-\d{2});/)?.[1] || '0000-00-00';
                     const dateB = b.match(/\/\/ TODO .*?; (\d{4}-\d{2}-\d{2});/)?.[1] || '0000-00-00';
-            
+
                     return new Date(dateB) - new Date(dateA);
                 });
                 sortedByDate.forEach(a => {
@@ -93,4 +92,13 @@ function writeTodos(todosArray) {
     }
 }
 
-//TODO makeIt!
+function sortTodosByUser(todos) {
+    return todos.sort((a, b) => {
+        const authorA = a.split(';')[0].replace('// TODO', '').trim();
+        const authorB = b.split(';')[0].replace('// TODO', '').trim();
+
+        if (!authorA) return 1;
+        if (!authorB) return -1;
+        return authorA.localeCompare(authorB);
+    });
+}//TODO makeIt!
