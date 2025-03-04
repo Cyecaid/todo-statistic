@@ -32,7 +32,7 @@ getFiles().forEach((file) => {
 })
 
 function processCommand(command) {
-    if (command.includes("user")) {
+    if (command.includes("user ")) {
         const [_, user] = command.split(' ');
         for (const todo of todos) {
             if (todo.includes(`// TODO ${user}`)) {
@@ -52,19 +52,24 @@ function processCommand(command) {
                 writeTodos(importantTodos);
                 break;
             case 'sort importance':
-                const importantTodosToSort = getImportantTodos();
-                const sortedTodos = importantTodosToSort.sort((a, b) => b["!"] - a["!"]);
-                writeTodos(sortedTodos)
+                const arrayToSort = getImportantTodos();
+                const sortedImportantTodos = arrayToSort.sort((a, b) => {
+                    const countA = (a.match(/!/g) || []).length;
+                    const countB = (b.match(/!/g) || []).length;
+                    return countB - countA;
+                });
+
+                const nonImportantTodos = todos.filter(todo => !todo.includes('!'));
+
+                const finalTodos = [...sortedImportantTodos, ...nonImportantTodos];
+
+                writeTodos(finalTodos);
                 break;
             case 'sort user':
-                
-                break
-                todos.forEach((command) => {
-                    let regex = /\/\/ TODO\s*\{([^}]+)\};/;
-                    if (command.match('// TODO ')) {}
-                })
-
+                const sortedByUsers = sortTodosByUser(todos)
+                writeTodos(sortedByUsers)
                 break;
+
             case 'sort date':
                 const sortedByDate = [...todos].sort((a, b) => {
                     const dateA = a.match(/\/\/ TODO .*?; (\d{4}-\d{2}-\d{2});/)?.[1] || '0000-00-00';
@@ -102,4 +107,14 @@ function writeTodos(todosArray) {
     }
 }
 
-//TODO makeIt!
+function sortTodosByUser(todos) {
+    return todos.sort((a, b) => {
+        const authorA = a.split(';')[0].replace('// TODO', '').trim();
+        const authorB = b.split(';')[0].replace('// TODO', '').trim();
+
+        if (!authorA) return 1;
+        if (!authorB) return -1;
+        return authorA.localeCompare(authorB);
+    });
+}
+
