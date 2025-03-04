@@ -20,26 +20,40 @@ function findTodosInFile(file) {
 
     lines.forEach((line, index) => {
         if (line.includes('// TODO')) {
-            todos.push({
-                line: index + 1,
-                comment: line.trim()
-            });
+            todos.push(line.trim());
         }
     });
 
     return todos;
 }
+
+getFiles().forEach((file) => {
+    todos.push(...findTodosInFile(file));
+})
+
+const todosWithDate = []
+
+
 function processCommand(command) {
     switch (command) {
         case 'show':
-            getFiles().forEach((file) => {
-                todos.push(...findTodosInFile(file));
-            })
             console.log(todos);
             break;
         case 'exit':
             process.exit(0);
             break;
+        case 'sort importance':
+            break;
+        case 'sort user':
+            todos.forEach((command) => {
+                let regex = /\/\/ TODO\s*\{([^}]+)\};/;
+                if (command.match('// TODO ')) {}
+            })
+
+            break
+        case 'sort date':
+            break;
+
         default:
             console.log('wrong command');
             break;
