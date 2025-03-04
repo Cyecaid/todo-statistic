@@ -42,10 +42,14 @@ function processCommand(command) {
     } else {
         switch (command) {
             case 'show':
-                console.log(todos);
+                writeTodos(todos)
                 break;
             case 'exit':
                 process.exit(0);
+                break;
+            case 'important':
+                const importantTodos = getImportantTodos();
+                writeTodos(importantTodos);
                 break;
             case 'sort importance':
                 break;
