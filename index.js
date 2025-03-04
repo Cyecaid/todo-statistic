@@ -37,7 +37,11 @@ const todosWithDate = []
 function processCommand(command) {
     switch (command) {
         case 'show':
-            console.log(todos);
+            writeTodos(todos)
+            break;
+        case 'important':
+            const importantTodos = getImportantTodos()
+            writeTodos(importantTodos)
             break;
         case 'exit':
             process.exit(0);
@@ -60,4 +64,22 @@ function processCommand(command) {
     }
 }
 
-// TODO you can do it!
+function getImportantTodos() {
+    /** @type {Array<string>} */
+    let importantTodos = []
+
+    for (const todoCommand of todos) {
+        if (todoCommand.includes('!')) {
+            importantTodos.push(todoCommand)
+        }
+    }
+    return importantTodos
+}
+
+function writeTodos(todosArray) {
+    for (const item of todosArray) {
+        console.log(item)
+    }
+}
+
+//TODO makeIt!
