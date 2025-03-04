@@ -31,36 +31,38 @@ getFiles().forEach((file) => {
     todos.push(...findTodosInFile(file));
 })
 
-const todosWithDate = []
-
-
 function processCommand(command) {
-    switch (command) {
-        case 'show':
-            writeTodos(todos)
-            break;
-        case 'important':
-            const importantTodos = getImportantTodos()
-            writeTodos(importantTodos)
-            break;
-        case 'exit':
-            process.exit(0);
-            break;
-        case 'sort importance':
-            break;
-        case 'sort user':
-            todos.forEach((command) => {
-                let regex = /\/\/ TODO\s*\{([^}]+)\};/;
-                if (command.match('// TODO ')) {}
-            })
+    if (command.includes("user")) {
+        const [_, user] = command.split(' ');
+        for (const todo of todos) {
+            if (todo.includes(`// TODO ${user}`)) {
+                console.log(todo);
+            }
+        }
+    } else {
+        switch (command) {
+            case 'show':
+                console.log(todos);
+                break;
+            case 'exit':
+                process.exit(0);
+                break;
+            case 'sort importance':
+                break;
+            case 'sort user':
+                todos.forEach((command) => {
+                    let regex = /\/\/ TODO\s*\{([^}]+)\};/;
+                    if (command.match('// TODO ')) {}
+                })
 
-            break
-        case 'sort date':
-            break;
+                break
+            case 'sort date':
+                break;
 
-        default:
-            console.log('wrong command');
-            break;
+            default:
+                console.log('wrong command');
+                break;
+        }
     }
 }
 
