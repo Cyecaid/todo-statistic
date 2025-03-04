@@ -52,6 +52,9 @@ function processCommand(command) {
                 writeTodos(importantTodos);
                 break;
             case 'sort importance':
+                const importantTodosToSort = getImportantTodos();
+                const sortedTodos = importantTodosToSort.sort((a, b) => b["!"] - a["!"]);
+                writeTodos(sortedTodos)
                 break;
             case 'sort user':
                 todos.forEach((command) => {
@@ -59,7 +62,7 @@ function processCommand(command) {
                     if (command.match('// TODO ')) {}
                 })
 
-                break
+                break;
             case 'sort date':
                 break;
 
@@ -88,4 +91,3 @@ function writeTodos(todosArray) {
     }
 }
 
-//TODO makeIt!
