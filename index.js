@@ -57,6 +57,8 @@ function processCommand(command) {
                 writeTodos(sortedTodos)
                 break;
             case 'sort user':
+                
+                break
                 todos.forEach((command) => {
                     let regex = /\/\/ TODO\s*\{([^}]+)\};/;
                     if (command.match('// TODO ')) {}
@@ -64,6 +66,15 @@ function processCommand(command) {
 
                 break;
             case 'sort date':
+                const sortedByDate = [...todos].sort((a, b) => {
+                    const dateA = a.match(/\/\/ TODO .*?; (\d{4}-\d{2}-\d{2});/)?.[1] || '0000-00-00';
+                    const dateB = b.match(/\/\/ TODO .*?; (\d{4}-\d{2}-\d{2});/)?.[1] || '0000-00-00';
+            
+                    return new Date(dateB) - new Date(dateA);
+                });
+                sortedByDate.forEach(a => {
+                    console.log(a);
+                })
                 break;
 
             default:
@@ -91,3 +102,4 @@ function writeTodos(todosArray) {
     }
 }
 
+//TODO makeIt!
