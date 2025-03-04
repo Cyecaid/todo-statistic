@@ -11,8 +11,32 @@ function getFiles() {
     return filePaths.map(path => readFile(path));
 }
 
+const todos = []
+
+
+function findTodosInFile(file) {
+    const lines = file.split('\n');
+    const todos = [];
+
+    lines.forEach((line, index) => {
+        if (line.includes('// TODO')) {
+            todos.push({
+                line: index + 1,
+                comment: line.trim()
+            });
+        }
+    });
+
+    return todos;
+}
 function processCommand(command) {
     switch (command) {
+        case 'show':
+            getFiles().forEach((file) => {
+                todos.push(...findTodosInFile(file));
+            })
+            console.log(todos);
+            break;
         case 'exit':
             process.exit(0);
             break;
